@@ -6,6 +6,7 @@
   --foreground-primary: #1c2d43;
   --foreground-secondary: #ffffff;
   --divider-oceanblue: #275089;
+  --transparent-oceanblue: rgba(39, 80, 137, 0.35);
   --divider-lightgray: #f3f3f3;
   --divider-skyblue: #5899dd;
 }
@@ -15,6 +16,7 @@
   --color-palette-color-primary: var(--foreground-primary);
   --color-palette-color-secondary: var(--foreground-secondary);
   --color-palette-oceanblue: var(--divider-oceanblue);
+  --color-palette-transparent-oceanblue: var(--transparent-oceanblue);
   --color-palette-lightgray: var(--divider-lightgray);
   --color-palette-skyblue: var(--divider-skyblue);
   --font-sans: var(--font-geist-sans);
@@ -24,5 +26,5 @@
 body {
   background: var(--background);
   color: var(--foreground-primary);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Poppins", sans-serif;
 }
