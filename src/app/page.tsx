@@ -15,8 +15,9 @@ export default function Home() {
             className="object-cover rounded-xl"
           />
           <Modal
+            buttonTitle="Login"
             headerTitle="Sign in to Org-Chart"
-            inputFields={["Username", "Password"]}
+            inputLabels={["Email adress", "Password"]}
           />
         </div>
       </section>

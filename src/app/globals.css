@@ -3,6 +3,7 @@
 /*===GLOBAL COLOR VARIABLES===*/
 :root {
   --background: #ffffff;
+  --background-transparent: rgba(255, 255, 255, 0.25);
   --foreground-primary: #1c2d43;
   --foreground-secondary: #ffffff;
   --divider-oceanblue: #275089;
@@ -13,6 +14,7 @@
 
 @theme inline {
   --color-palette-background: var(--background);
+  --color-palette-background-transparent: var(--background-transparent);
   --color-palette-color-primary: var(--foreground-primary);
   --color-palette-color-secondary: var(--foreground-secondary);
   --color-palette-oceanblue: var(--divider-oceanblue);
