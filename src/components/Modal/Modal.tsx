@@ -9,13 +9,13 @@ interface ModalProps<T> {
   setFormData: (val: T) => void;
 }
 
-const Modal = <T extends Record<keyof T, string>>({
+export default function Modal<T extends Record<keyof T, string>>({
   buttonTitle,
   headerTitle,
   inputLabels: inputFields,
   formData,
   setFormData,
-}: ModalProps<T>) => {
+}: ModalProps<T>) {
   return (
     <div className="bg-palette-transparent-oceanblue min-h-[400px] rounded-md overflow-hidden flex flex-col gap-3 justify-between">
       <div className="bg-palette-transparent-oceanblue py-6 pl-5 pb-4 text-palette-color-secondary">
@@ -48,6 +48,4 @@ const Modal = <T extends Record<keyof T, string>>({
       </div>
     </div>
   );
-};
-
-export default Modal;
+}

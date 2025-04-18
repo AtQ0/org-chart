@@ -1,8 +1,8 @@
-export interface Checkbox {
+export interface CheckboxProps {
   labelText: string;
 }
 
-const Checkbox = ({ labelText }: Checkbox) => {
+export default function Checkbox({ labelText }: CheckboxProps) {
   return (
     <label className="relative w-fit flex items-center gap-2 cursor-pointer select-none">
       <input
@@ -24,6 +24,4 @@ const Checkbox = ({ labelText }: Checkbox) => {
       {labelText}
     </label>
   );
-};
-
-export default Checkbox;
+}

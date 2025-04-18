@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import Modal from '@/components/Modal/Modal';
 import './globals.css';
 
@@ -11,14 +12,27 @@ interface LoginForm {
 }
 
 export default function Home() {
+  const router = useRouter();
   const [formData, setFormData] = useState<LoginForm>({
     email: '',
     password: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+
+    const res = await fetch('/api/users', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    if (data.user_id) {
+      // Redirect to the user-specific page, passing user_id and role_name in the URL
+      router.push(`/user/${data.user_id}?role_name=${data.role_name}`);
+    }
   };
 
   return (

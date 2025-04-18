@@ -1,9 +1,9 @@
-interface Button {
+interface ButtonProps {
   buttonTitle: string;
   type?: 'button' | 'submit' | 'reset';
 }
 
-const Button = ({ buttonTitle, type }: Button) => {
+export default function Button({ buttonTitle, type = 'button' }: ButtonProps) {
   return (
     <button
       className="bg-palette-skyblue py-2 px-8 pb-1.5 rounded-md cursor-pointer text-white"
@@ -12,6 +12,4 @@ const Button = ({ buttonTitle, type }: Button) => {
       {buttonTitle}
     </button>
   );
-};
-
-export default Button;
+}
