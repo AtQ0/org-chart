@@ -1,6 +1,5 @@
 'use client';
 
-// Add this line at the top
 import { usePathname } from 'next/navigation';
 import ClientSessionProvider from '../components/providers/ClientSessionProvider';
 import './globals.css';
@@ -10,8 +9,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Pathname check to conditionally render header
+  // Get the current path to conditionally render layout elements
   const pathname = usePathname();
+
+  // Do not render header and footer on the homepage
   const showHeader = pathname !== '/';
   const showFooter = pathname !== '/';
 
@@ -19,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <head></head>
       <body>
+        {/* Wraps the entire app in NextAuth session context */}
         <ClientSessionProvider>
+          {/* Conditionally render header based on path */}
           {showHeader && (
             <header>
               <nav>
@@ -27,7 +30,11 @@ export default function RootLayout({
               </nav>
             </header>
           )}
+
+          {/* Main content area */}
           <main>{children}</main>
+
+          {/* Conditionally render footer based on path */}
           {showFooter && <footer>{/* Add footer content here */}</footer>}
         </ClientSessionProvider>
       </body>
