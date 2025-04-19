@@ -15,7 +15,7 @@ const UserPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <div>
-      <h1>Hello, World!</h1>
+      <h1>USER PROFILE PAGE</h1>
       <p>User ID: {id}</p>
       <p>Role: {role_name}</p>
     </div>
