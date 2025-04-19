@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Modal from '@/components/Modal/Modal';
@@ -21,17 +22,18 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch('/api/users', {
-      method: 'POST',
-      body: JSON.stringify(formData),
+    const res = await signIn('credentials', {
+      redirect: false,
+      email: formData.email,
+      password: formData.password,
     });
 
-    const data = await res.json();
-    console.log(data);
-
-    if (data.user_id) {
-      // Redirect to the user-specific page, passing user_id and role_name in the URL
-      router.push(`/user/${data.user_id}?role_name=${data.role_name}`);
+    if (res?.ok) {
+      // Optionally fetch session data or just redirect
+      router.push('/org-chart');
+    } else {
+      console.error('Login failed', res?.error);
+      // Optionally show error message to user
     }
   };
 
