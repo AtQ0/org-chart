@@ -1,5 +1,5 @@
-import Button from '../Button/Button';
-import Checkbox from '../Checkbox/Checkbox';
+import Button from '../button/Button';
+import Checkbox from '../checkbox/Checkbox';
 
 interface ModalProps<T> {
   buttonTitle?: string;

@@ -1,8 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-
-// Import useSession to access session data
+import ClientLayout from '@/components/layout/ClientLayout';
 
 const OrgChart = () => {
   // Use the session hook to access the user session
@@ -21,11 +20,13 @@ const OrgChart = () => {
   const { id, name, role } = session.user;
 
   return (
-    <div>
-      <h1>Welcome to the Org Chart, {name}!</h1>
-      <p>User ID: {id}</p>
-      <p>Role: {role}</p>
-    </div>
+    <ClientLayout>
+      <div>
+        <h1>Welcome to the Org Chart, {name}!</h1>
+        <p>User ID: {id}</p>
+        <p>Role: {role}</p>
+      </div>
+    </ClientLayout>
   );
 };
 

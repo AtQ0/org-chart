@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import Modal from '@/components/Modal/Modal';
+import Modal from '@/components/modal/Modal';
 import './globals.css';
 
 interface LoginForm {
@@ -29,11 +29,10 @@ export default function Home() {
     });
 
     if (res?.ok) {
-      // Optionally fetch session data or just redirect
       router.push('/org-chart');
     } else {
+      // Show error message to user
       console.error('Login failed', res?.error);
-      // Optionally show error message to user
     }
   };
 
