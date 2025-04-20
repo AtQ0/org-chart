@@ -3,11 +3,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function MobileNavbar() {
+  function handleClick() {
+    prompt('yeah');
+  }
+
   return (
     <nav className="relative bg-palette-transparent-oceanblue flex justify-between items-center p-4 px-5 lg:px-10">
       {/* Left side group */}
-      <div className="bg-pink-300 flex items-center gap-5 md:gap-2">
-        <button className="bg-amber-500 cursor-pointer">
+      <div className="bg-pink-300 flex items-center gap-5 md:gap-2 md:cursor-pointer">
+        <button className="bg-amber-500 cursor-pointer" onClick={handleClick}>
           <List className="w-7 h-7" />
         </button>
 
