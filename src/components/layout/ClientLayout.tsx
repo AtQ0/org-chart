@@ -2,6 +2,8 @@
 
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
+import Footer from '../footer/Footer';
+import MobileNavbar from '../navbar/MobileNavBar';
 
 export default function ClientLayout({
   children,
@@ -20,18 +22,16 @@ export default function ClientLayout({
   return (
     <>
       {showHeader && (
-        <header>
-          <nav>
-            <p>yeaah nav</p>
-          </nav>
+        <header className="w-full">
+          <MobileNavbar />
         </header>
       )}
 
-      <main>{children}</main>
+      <main className="flex-1 w-full">{children}</main>
 
       {showFooter && (
-        <footer>
-          <p>Yeah Footer</p>
+        <footer className="w-full">
+          <Footer />
         </footer>
       )}
     </>

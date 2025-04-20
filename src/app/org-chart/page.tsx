@@ -21,11 +21,11 @@ const OrgChart = () => {
 
   return (
     <ClientLayout>
-      <div>
+      <section className="h-[100%]">
         <h1>Welcome to the Org Chart, {name}!</h1>
         <p>User ID: {id}</p>
         <p>Role: {role}</p>
-      </div>
+      </section>
     </ClientLayout>
   );
 };
