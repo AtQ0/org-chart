@@ -3,13 +3,18 @@
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import Footer from '../footer/Footer';
-import MobileNavbar from '../navbar/MobileNavBar';
+import Navbar from '../navbar/NavBar';
+import Searchbar from '../searchbar/Searchbar';
+
+interface ClientLayoutProps {
+  children: React.ReactNode;
+  userRole: string;
+}
 
 export default function ClientLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+  userRole,
+}: ClientLayoutProps) {
   const pathname = usePathname();
   const { data: session, status } = useSession();
 
@@ -23,11 +28,13 @@ export default function ClientLayout({
     <>
       {showHeader && (
         <header className="w-full">
-          <MobileNavbar />
+          <Navbar userRole={userRole} />
         </header>
       )}
 
-      <main className="flex-1 w-full">{children}</main>
+      <main className="flex-1 w-full bg-green-500 p-5 flex flex-col gap-5 lg:px-10">
+        {children}
+      </main>
 
       {showFooter && (
         <footer className="w-full">

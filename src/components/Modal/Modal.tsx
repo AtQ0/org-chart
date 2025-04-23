@@ -17,7 +17,7 @@ export default function Modal<T extends Record<keyof T, string>>({
   setFormData,
 }: ModalProps<T>) {
   return (
-    <div className="bg-palette-transparent-oceanblue min-h-[400px] rounded-md overflow-hidden flex flex-col gap-3 justify-between">
+    <div className="bg-palette-transparent-oceanblue min-w-[410px] rounded-md overflow-hidden flex flex-col gap-3 justify-between">
       <div className="bg-palette-transparent-oceanblue py-6 pl-5 pb-4 text-palette-color-secondary">
         <h2 className="text-xl select-none">{headerTitle}</h2>
       </div>

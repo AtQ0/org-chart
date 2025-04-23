@@ -38,17 +38,18 @@ export default function Home() {
 
   return (
     <main>
-      <section className="px-5 flex flex-col justify-center items-center h-screen bg-[url('/images/clouds.png')] bg-cover bg-center lg:bg-[url('/images/clouds.png')]">
+      <section className="flex flex-col justify-center items-center h-screen">
         <div className="h-[100%] flex flex-col gap-10 pt-10">
           <Image
-            alt="My image"
-            className="object-cover rounded-xl"
+            priority
+            alt="Logotype"
+            className="object-cover rounded-xl w-full" // Use Tailwind's width utility class
             height={400}
             src="/images/main-logo.png"
             width={400}
           />
 
-          <form onSubmit={handleSubmit}>
+          <form className="flex justify-center" onSubmit={handleSubmit}>
             <Modal<LoginForm>
               buttonTitle="Login"
               formData={formData}
