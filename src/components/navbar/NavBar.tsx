@@ -3,11 +3,13 @@ import {
   List,
   MagnifyingGlass,
   SignOut,
+  TreeStructure,
   UserCircle,
 } from '@phosphor-icons/react';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { useBreakpoints } from '@/hooks/useBreakpoint';
 import { BREAKPOINTS } from '@/utils/breakpoints';
 import Searchbar from '../searchbar/Searchbar';
@@ -17,6 +19,9 @@ interface NavbarProps {
 }
 
 export default function Navbar({ userRole }: NavbarProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const onDashboard = pathname === '/dashboard';
   const [showFloating, setShowFloating] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
@@ -139,12 +144,24 @@ export default function Navbar({ userRole }: NavbarProps) {
 
           {userRole === 'admin' ? (
             <div className="flex gap-6 items-center">
-              <button
-                aria-label="Admin dashboard"
-                className="bg-green-600 h-fit p-0.5"
-              >
-                <Gauge className="h-7 w-7" />
-              </button>
+              {onDashboard ? (
+                <button
+                  aria-label="Admin dashboard"
+                  className="bg-green-600 h-fit p-0.5 cursor-pointer"
+                  onClick={() => router.push('/org-chart')}
+                >
+                  <TreeStructure className="h-7 w-7" />
+                </button>
+              ) : (
+                <button
+                  aria-label="Admin dashboard"
+                  className="bg-green-600 h-fit p-0.5 cursor-pointer"
+                  onClick={() => router.push('/dashboard')}
+                >
+                  <Gauge className="h-7 w-7" />
+                </button>
+              )}
+
               <button aria-label="User profile" className="bg-blue-500 p-0.5">
                 <UserCircle className="h-7 w-7" />
               </button>
