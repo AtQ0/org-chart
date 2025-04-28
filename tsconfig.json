@@ -13,7 +13,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "types": ["next-auth"], // ✅ Add this line
+    "types": ["next-auth"],
+    "typeRoots": ["types", "node_modules/@types"],
     "plugins": [
       {
         "name": "next"

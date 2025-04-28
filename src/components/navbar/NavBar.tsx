@@ -7,9 +7,10 @@ import {
   UserCircle,
 } from '@phosphor-icons/react';
 import { useEffect, useRef, useState } from 'react';
+import { signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { redirect, usePathname, useRouter } from 'next/navigation';
 import { useBreakpoints } from '@/hooks/useBreakpoint';
 import { BREAKPOINTS } from '@/utils/breakpoints';
 import Searchbar from '../searchbar/Searchbar';
@@ -76,6 +77,11 @@ export default function Navbar({ userRole }: NavbarProps) {
   const toggleFloating = () => {
     setSearchValue(''); // reset input every click
     setShowFloating(prev => !prev);
+  };
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
+    router.push('/');
   };
 
   return (
@@ -165,6 +171,12 @@ export default function Navbar({ userRole }: NavbarProps) {
               <button aria-label="User profile" className="bg-blue-500 p-0.5">
                 <UserCircle className="h-7 w-7" />
               </button>
+              <button aria-label="Sign out" className="bg-yellow-300">
+                <SignOut
+                  className="h-7 w-7 cursor-pointer"
+                  onClick={handleSignOut}
+                />
+              </button>
             </div>
           ) : (
             <div className="flex gap-6 items-center">
@@ -172,7 +184,10 @@ export default function Navbar({ userRole }: NavbarProps) {
                 <UserCircle className="h-7 w-7" />
               </button>
               <button aria-label="Sign out" className="bg-yellow-300">
-                <SignOut className="h-7 w-7" />
+                <SignOut
+                  className="h-7 w-7 cursor-pointer"
+                  onClick={handleSignOut}
+                />
               </button>
             </div>
           )}

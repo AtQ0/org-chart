@@ -98,21 +98,23 @@ CREATE TABLE users (
 --- MOCKED DATA---
 ------------------
 
--- mocked data for titles
+-- Mocked data for titles
 INSERT INTO titles (id, title_name) VALUES
 ('11111111-1111-1111-1111-111111111111', 'engineering manager'),
 ('22222222-2222-2222-2222-222222222222', 'software engineer'),
 ('33333333-3333-3333-3333-333333333333', 'ux designer'),
 ('44444444-4444-4444-4444-444444444444', 'product manager'),
 ('55555555-5555-5555-5555-555555555555', 'qa engineer'),
-('66666666-6666-6666-6666-666666666666', 'designer manager');
+('66666666-6666-6666-6666-666666666666', 'designer manager'),
+('77777777-7777-7777-7777-777777777777', 'CEO');  -- CEO title in order
 
 
 -- mocked data for teams
 INSERT INTO teams (id, team_name) VALUES
 ('11111111-1111-1111-1111-111111111111', 'engineering team'),
 ('22222222-2222-2222-2222-222222222222', 'product team'),
-('33333333-3333-3333-3333-333333333333', 'designer team');
+('33333333-3333-3333-3333-333333333333', 'designer team'),
+('44444444-4444-4444-4444-444444444444', 'board of directors');
 
 -- mocked data for roles
 INSERT INTO roles (id, role_name)
@@ -122,124 +124,124 @@ VALUES
   ('33333333-3333-3333-3333-333333333333', 'team manager'),
   ('44444444-4444-4444-4444-444444444444', 'department manager'),
   ('55555555-5555-5555-5555-555555555555', 'office manager'),
-  ('66666666-6666-6666-6666-666666666666', 'admin');
+  ('66666666-6666-6666-6666-666666666666', 'admin'),
 
 
 -- Mocked data for users
 INSERT INTO users (
     id, first_name, last_name, email, password, image, title_id, team_id, manager_id, role_id
 ) VALUES
--- New user with Admin role and Software Engineer title
+-- CEO (top-level person)
 (
-    'f9a3843b-50e5-4bc6-a4a5-4a29b7efb9d9',  -- New UUID
-    'james',
-    'wilson',
-    'james.wilson@example.com',
-    '$2a$12$MDOWgbgDkttO7PJ1ZF.wAO/f15Jrciplu8iTKKvnv.RG2rvA.1mRa',  -- Hashed password (sommar2025)
-    'https://example.com/images/james.jpg',
-    '22222222-2222-2222-2222-222222222222', -- Software Engineer title
-    '11111111-1111-1111-1111-111111111111', -- Engineering Team (example team)
-    NULL,  -- No manager since they are an admin
+    'd8f5d1b4-d3ad-4f61-99e1-b4e3d9a71e6a',  -- New UUID for CEO
+    'alex',
+    'johnson',
+    'alex.johnson@example.com',
+    '$2a$12$MDOWgbgDkttO7PJ1ZF.wAO/f15Jrciplu8iTKKvnv.RG2rvA.1mRa',  -- Hashed password
+    'https://example.com/images/alex.jpg',
+    '77777777-7777-7777-7777-777777777777', -- CEO title
+    '44444444-4444-4444-4444-444444444444',  -- Board of Directors Team (CEO's board)
+    NULL,  -- No manager since they are at the top
     '66666666-6666-6666-6666-666666666666'  -- Admin role
 ),
--- Engineering Manager (Emma) - leads Team A & Team B
+-- Engineering Manager (Emma) - reports to CEO
 (
-    '50e90240-898c-4567-a5ef-57a887f71498',
+    '50e90240-898c-4567-a5ef-57a887f71498',  -- Emma, Engineering Manager
     'emma',
     'thompson',
     'emma.thompson@example.com',
     '$2a$12$MDOWgbgDkttO7PJ1ZF.wAO/f15Jrciplu8iTKKvnv.RG2rvA.1mRa',
     'https://example.com/images/emma.jpg',
-    '11111111-1111-1111-1111-111111111111', -- Engineering Manager
+    '11111111-1111-1111-1111-111111111111', -- Engineering Manager title
     '11111111-1111-1111-1111-111111111111', -- Engineering Team
-    NULL,
-    '33333333-3333-3333-3333-333333333333' -- Team Manager
+    'd8f5d1b4-d3ad-4f61-99e1-b4e3d9a71e6a', -- Reports to CEO
+    '33333333-3333-3333-3333-333333333333'  -- Team Manager role
 ),
--- Team A: Engineering (reports to Emma)
+-- Team A (Engineering) under Emma
 (
-    '42eb0b16-e092-43cd-b59d-e2c03fe13caf',
+    '42eb0b16-e092-43cd-b59d-e2c03fe13caf', -- Liam, Software Engineer in Team A
     'liam',
     'nguyen',
     'liam.nguyen@example.com',
     '$2a$12$MDOWgbgDkttO7PJ1ZF.wAO/f15Jrciplu8iTKKvnv.RG2rvA.1mRa',
     'https://example.com/images/liam.jpg',
-    '22222222-2222-2222-2222-222222222222', -- Software Engineer
+    '22222222-2222-2222-2222-222222222222', -- Software Engineer title
     '11111111-1111-1111-1111-111111111111', -- Engineering Team
-    '50e90240-898c-4567-a5ef-57a887f71498',  -- Emma
-    '11111111-1111-1111-1111-111111111111'  -- Employee
+    '50e90240-898c-4567-a5ef-57a887f71498',  -- Reports to Emma
+    '11111111-1111-1111-1111-111111111111'  -- Employee role
 ),
 (
-    'cafb008b-5db9-43f6-8974-e1c094dfb5f5',
+    'cafb008b-5db9-43f6-8974-e1c094dfb5f5', -- Sophia, Software Engineer in Team A
     'sophia',
     'martinez',
     'sophia.martinez@example.com',
     '$2a$12$MDOWgbgDkttO7PJ1ZF.wAO/f15Jrciplu8iTKKvnv.RG2rvA.1mRa',
     'https://example.com/images/sophia.jpg',
-    '22222222-2222-2222-2222-222222222222',
+    '22222222-2222-2222-2222-222222222222', -- Software Engineer title
     '11111111-1111-1111-1111-111111111111', -- Engineering Team
-    '50e90240-898c-4567-a5ef-57a887f71498',  -- Emma
-    '11111111-1111-1111-1111-111111111111'  -- Employee
+    '50e90240-898c-4567-a5ef-57a887f71498',  -- Reports to Emma
+    '11111111-1111-1111-1111-111111111111'  -- Employee role
 ),
--- Team B: QA (also reports to Emma)
+-- Team B (QA) under Emma
 (
-    '13590c7b-18fb-423f-aba5-f5cb751bddd0',
+    '13590c7b-18fb-423f-aba5-f5cb751bddd0', -- Mason, QA Engineer in Team B
     'mason',
     'taylor',
     'mason.taylor@example.com',
     '$2a$12$MDOWgbgDkttO7PJ1ZF.wAO/f15Jrciplu8iTKKvnv.RG2rvA.1mRa',
     'https://example.com/images/mason.jpg',
-    '55555555-5555-5555-5555-555555555555', -- QA Engineer
-    '22222222-2222-2222-2222-222222222222', -- Product Team
-    '50e90240-898c-4567-a5ef-57a887f71498',  -- Emma
-    '33333333-3333-3333-3333-333333333333'   -- Team Manager
+    '55555555-5555-5555-5555-555555555555', -- QA Engineer title
+    '11111111-1111-1111-1111-111111111111', -- Engineering Team
+    '50e90240-898c-4567-a5ef-57a887f71498',  -- Reports to Emma
+    '11111111-1111-1111-1111-111111111111'   -- Employee role
 ),
 (
-    '7d2360f4-3665-4fde-9dee-3d62dcaf3c47',
+    '7d2360f4-3665-4fde-9dee-3d62dcaf3c47', -- Ava, QA Engineer in Team B
     'ava',
     'patel',
     'ava.patel@example.com',
     '$2a$12$MDOWgbgDkttO7PJ1ZF.wAO/f15Jrciplu8iTKKvnv.RG2rvA.1mRa',
     'https://example.com/images/ava.jpg',
-    '55555555-5555-5555-5555-555555555555', -- QA Engineer
-    '22222222-2222-2222-2222-222222222222', -- Product Team
-    '50e90240-898c-4567-a5ef-57a887f71498',  -- Emma
-    '33333333-3333-3333-3333-333333333333'   -- Team Manager
+    '55555555-5555-5555-5555-555555555555', -- QA Engineer title
+    '11111111-1111-1111-1111-111111111111', -- Engineering Team
+    '50e90240-898c-4567-a5ef-57a887f71498',  -- Reports to Emma
+    '11111111-1111-1111-1111-111111111111'   -- Employee role
 ),
--- Product Manager (Olivia) - leads Team C
+-- Product Manager (Olivia) - reports to CEO
 (
-    '791273af-83fd-435a-a992-0f13eb958b7f',
+    '791273af-83fd-435a-a992-0f13eb958b7f', -- Olivia, Product Manager
     'olivia',
     'chen',
     'olivia.chen@example.com',
     '$2a$12$MDOWgbgDkttO7PJ1ZF.wAO/f15Jrciplu8iTKKvnv.RG2rvA.1mRa',
     'https://example.com/images/olivia.jpg',
-    '44444444-4444-4444-4444-444444444444', -- Product Manager
-    '33333333-3333-3333-3333-333333333333', -- Designer Team
-    NULL,
-    '44444444-4444-4444-4444-444444444444'   -- Department Manager
+    '44444444-4444-4444-4444-444444444444', -- Product Manager title
+    '22222222-2222-2222-2222-222222222222', -- Product Team
+    'd8f5d1b4-d3ad-4f61-99e1-b4e3d9a71e6a', -- Reports to CEO
+    '44444444-4444-4444-4444-444444444444'   -- Department Manager role
 ),
--- Team C: Product (reports to Olivia)
+-- Team C (Product) under Olivia
 (
-    '4fcd1efa-3490-4e7b-b683-03dfe700965e',
+    '4fcd1efa-3490-4e7b-b683-03dfe700965e', -- Ethan, Software Engineer in Team C
     'ethan',
     'garcia',
     'ethan.garcia@example.com',
     '$2a$12$MDOWgbgDkttO7PJ1ZF.wAO/f15Jrciplu8iTKKvnv.RG2rvA.1mRa',
     'https://example.com/images/ethan.jpg',
-    '22222222-2222-2222-2222-222222222222', -- Software Engineer
-    '33333333-3333-3333-3333-333333333333', -- Designer Team
-    '791273af-83fd-435a-a992-0f13eb958b7f',  -- Olivia
-    '11111111-1111-1111-1111-111111111111'  -- Employee
+    '22222222-2222-2222-2222-222222222222', -- Software Engineer title
+    '22222222-2222-2222-2222-222222222222', -- Product Team
+    '791273af-83fd-435a-a992-0f13eb958b7f',  -- Reports to Olivia
+    '11111111-1111-1111-1111-111111111111'  -- Employee role
 ),
 (
-    'b3d9216d-aaed-42bd-97ab-823b3c7e5e02',
+    'b3d9216d-aaed-42bd-97ab-823b3c7e5e02', -- Daniel, Software Engineer in Team C
     'daniel',
     'lee',
     'daniel.lee@example.com',
     '$2a$12$MDOWgbgDkttO7PJ1ZF.wAO/f15Jrciplu8iTKKvnv.RG2rvA.1mRa',
     'https://example.com/images/daniel.jpg',
-    '22222222-2222-2222-2222-222222222222', -- Software Engineer
-    '33333333-3333-3333-3333-333333333333', -- Designer Team
-    '791273af-83fd-435a-a992-0f13eb958b7f',  -- Olivia
-    '11111111-1111-1111-1111-111111111111'  -- Employee
+    '22222222-2222-2222-2222-222222222222', -- Software Engineer title
+    '22222222-2222-2222-2222-222222222222', -- Product Team
+    '791273af-83fd-435a-a992-0f13eb958b7f',  -- Reports to Olivia
+    '11111111-1111-1111-1111-111111111111'  -- Employee role
 );
