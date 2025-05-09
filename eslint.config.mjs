@@ -30,6 +30,7 @@ const config = [
         },
       ],
     },
+    ignorePatterns: ['.next/', '.next/**'], // Add this line to ignore the .next folder
   },
 ];
 

@@ -44,7 +44,11 @@ export default function Modal<T extends Record<keyof T, string>>({
       </div>
 
       <div className="bg-palette-transparent-oceanblue w-full py-6 pl-5 flex items-center justify-between">
-        {buttonTitle ? <Button buttonTitle={buttonTitle} type="submit" /> : ''}
+        {buttonTitle ? (
+          <Button buttonTitle={buttonTitle} buttonType="submit" />
+        ) : (
+          ''
+        )}
       </div>
     </div>
   );

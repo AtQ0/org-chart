@@ -8,13 +8,9 @@ import Searchbar from '../searchbar/Searchbar';
 
 interface ClientLayoutProps {
   children: React.ReactNode;
-  userRole: string;
 }
 
-export default function ClientLayout({
-  children,
-  userRole,
-}: ClientLayoutProps) {
+export default function ClientLayout({ children }: ClientLayoutProps) {
   const pathname = usePathname();
   const { data: session, status } = useSession();
 
@@ -24,15 +20,18 @@ export default function ClientLayout({
   const showHeader = !isHome && isAuthenticated;
   const showFooter = !isHome && isAuthenticated;
 
+  // Check if session is not null before accessing session.user
+  const userRole = session?.user?.role; // Avoiding session! to handle null safely
+
   return (
     <>
       {showHeader && (
         <header className="w-full">
-          <Navbar userRole={userRole} />
+          <Navbar />
         </header>
       )}
 
-      <main className="flex-1 w-full bg-green-500 p-5 flex flex-col gap-5 lg:px-10">
+      <main className="flex-1 w-full p-5 flex flex-col gap-5 lg:px-10">
         {children}
       </main>
 

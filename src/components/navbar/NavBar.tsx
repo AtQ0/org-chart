@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Gauge,
   List,
@@ -7,41 +9,38 @@ import {
   UserCircle,
 } from '@phosphor-icons/react';
 import { useEffect, useRef, useState } from 'react';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { redirect, usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useBreakpoints } from '@/hooks/useBreakpoint';
 import { BREAKPOINTS } from '@/utils/breakpoints';
 import Searchbar from '../searchbar/Searchbar';
 
-interface NavbarProps {
-  userRole: string;
-}
-
-export default function Navbar({ userRole }: NavbarProps) {
+export default function Navbar() {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
   const onDashboard = pathname === '/dashboard';
   const [showFloating, setShowFloating] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [isNavigating, setIsNavigating] = useState(false);
 
-  /* breakpoint hook */
+  const userRole = session?.user?.role;
+  const userId = session?.user?.id;
+
   const { isBelowBreakpoint: isMobile } = useBreakpoints(BREAKPOINTS.mobile);
 
-  /*  nodes that shouldn’t trigger outside‑click close  */
   const roots = useRef<Set<HTMLElement>>(new Set());
   const addRoot = (el: HTMLElement | null): void => {
     if (el) roots.current.add(el);
   };
 
-  /* register the magnifier button as an “inside” node */
   const toggleBtnRef = useRef<HTMLButtonElement | null>(null);
   useEffect(() => {
     if (toggleBtnRef.current) roots.current.add(toggleBtnRef.current);
   }, []);
 
-  /* hide floating bar automatically at ≥ lg (1024 px) */
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 1024px)');
     const handler = (e: MediaQueryListEvent) =>
@@ -50,7 +49,6 @@ export default function Navbar({ userRole }: NavbarProps) {
     return () => mq.removeEventListener('change', handler);
   }, []);
 
-  /* clear search when clicking outside */
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const t = e.target as Node;
@@ -64,24 +62,23 @@ export default function Navbar({ userRole }: NavbarProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  /* menu click handler */
-  function handleMenuClick() {
-    prompt('yeah');
-  }
-
-  /* handlers conditioned on viewport */
-  const desktopMenuClick = !isMobile ? handleMenuClick : undefined;
-  const mobileHamburgerClick = isMobile ? handleMenuClick : undefined;
-
-  /* toggle button: close → clear text */
   const toggleFloating = () => {
-    setSearchValue(''); // reset input every click
+    setSearchValue('');
     setShowFloating(prev => !prev);
   };
 
   const handleSignOut = async () => {
-    await signOut({ redirect: false });
-    router.push('/');
+    if (isNavigating) return; // Prevent signing out while navigating
+
+    setIsNavigating(true); // Indicate that navigation is in progress
+    await signOut({ redirect: false }); // Sign out the user, but don't redirect automatically
+    router.push('/'); // Redirect manually to the home page or any other page you want after sign-out
+  };
+
+  const handleNavigate = (path: string) => {
+    if (isNavigating || pathname === path) return;
+    setIsNavigating(true);
+    router.push(path);
   };
 
   return (
@@ -93,16 +90,16 @@ export default function Navbar({ userRole }: NavbarProps) {
         {/* Left side */}
         <section
           aria-label="Main menu"
-          className="bg-pink-300 flex items-center gap-5 md:gap-2 md:cursor-pointer"
-          onClick={desktopMenuClick}
+          className="flex items-center gap-5 md:gap-2 md:cursor-pointer"
         >
-          <button className="bg-amber-500" onClick={mobileHamburgerClick}>
+          <button
+            className="bg-amber-500"
+            onClick={() => handleNavigate('/menu')}
+          >
             <List className="h-7 w-7 cursor-pointer" />
           </button>
 
-          <span className="hidden md:inline text-lg font-medium text-white bg-amber-300">
-            MENU
-          </span>
+          <span className="hidden md:inline text-lg font-medium">MENU</span>
 
           <Link aria-label="Home" className="block md:hidden" href="/">
             <Image
@@ -134,60 +131,71 @@ export default function Navbar({ userRole }: NavbarProps) {
 
         {/* Right side */}
         <section aria-label="User actions" className="flex gap-6 items-center">
-          {/* desktop search bar */}
           <div className="hidden w-[260px] lg:inline" ref={addRoot}>
             <Searchbar value={searchValue} onChange={setSearchValue} />
           </div>
 
-          {/* mobile toggle */}
           <button
             className="lg:hidden"
             ref={toggleBtnRef}
             onClick={toggleFloating}
           >
-            <MagnifyingGlass className="h-7 w-7 cursor-pointer bg-yellow-300" />
+            <MagnifyingGlass className="h-7 w-7 cursor-pointer" />
           </button>
 
           {userRole === 'admin' ? (
             <div className="flex gap-6 items-center">
-              {onDashboard ? (
-                <button
-                  aria-label="Admin dashboard"
-                  className="bg-green-600 h-fit p-0.5 cursor-pointer"
-                  onClick={() => router.push('/org-chart')}
-                >
+              <button
+                aria-label="Admin dashboard"
+                className="bg-green-600 h-fit p-0.5 cursor-pointer"
+                disabled={isNavigating}
+                onClick={() =>
+                  handleNavigate(onDashboard ? '/org-chart' : '/dashboard')
+                }
+              >
+                {onDashboard ? (
                   <TreeStructure className="h-7 w-7" />
-                </button>
-              ) : (
-                <button
-                  aria-label="Admin dashboard"
-                  className="bg-green-600 h-fit p-0.5 cursor-pointer"
-                  onClick={() => router.push('/dashboard')}
-                >
+                ) : (
                   <Gauge className="h-7 w-7" />
-                </button>
-              )}
+                )}
+              </button>
 
-              <button aria-label="User profile" className="bg-blue-500 p-0.5">
+              <button
+                aria-label="Profile"
+                className="bg-blue-500 p-0.5 cursor-pointer"
+                disabled={isNavigating}
+                onClick={() => handleNavigate(`/profile`)}
+              >
                 <UserCircle className="h-7 w-7" />
               </button>
-              <button aria-label="Sign out" className="bg-yellow-300">
-                <SignOut
-                  className="h-7 w-7 cursor-pointer"
-                  onClick={handleSignOut}
-                />
+
+              <button
+                aria-label="Sign out"
+                className="bg-yellow-300"
+                disabled={isNavigating}
+                onClick={handleSignOut}
+              >
+                <SignOut className="h-7 w-7 cursor-pointer" />
               </button>
             </div>
           ) : (
             <div className="flex gap-6 items-center">
-              <button aria-label="User profile" className="bg-yellow-300">
+              <button
+                aria-label="User profile"
+                className="bg-yellow-300"
+                disabled={isNavigating}
+                onClick={() => handleNavigate(`/user/${userId}`)}
+              >
                 <UserCircle className="h-7 w-7" />
               </button>
-              <button aria-label="Sign out" className="bg-yellow-300">
-                <SignOut
-                  className="h-7 w-7 cursor-pointer"
-                  onClick={handleSignOut}
-                />
+
+              <button
+                aria-label="Sign out"
+                className="bg-yellow-300"
+                disabled={isNavigating}
+                onClick={handleSignOut}
+              >
+                <SignOut className="h-7 w-7 cursor-pointer" />
               </button>
             </div>
           )}

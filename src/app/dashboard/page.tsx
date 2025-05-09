@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import DataListWithAdd from '@/components/dataListWithAdd/DataListWithAdd';
 import ClientLayout from '@/components/layout/ClientLayout';
 
 export default function Dashboard() {
@@ -17,15 +18,10 @@ export default function Dashboard() {
     return null;
   }
 
-  /* extract the role for the layout if it needs it */
-  const { role: userRole } = session.user;
-
   return (
-    <ClientLayout userRole={userRole}>
+    <ClientLayout>
       <section>
-        <div>
-          <p>This is the DASHBOARD</p>
-        </div>
+        <DataListWithAdd buttonTitle="Add country" headerTitle="Cuntries" />
       </section>
     </ClientLayout>
   );

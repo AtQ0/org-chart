@@ -193,7 +193,7 @@ INSERT INTO users (
     '55555555-5555-5555-5555-555555555555', -- QA Engineer title
     '11111111-1111-1111-1111-111111111111', -- Engineering Team
     '50e90240-898c-4567-a5ef-57a887f71498',  -- Reports to Emma
-    '11111111-1111-1111-1111-111111111111'   -- Employee role
+    '66666666-6666-6666-6666-666666666666'   -- Employee role
 ),
 (
     '7d2360f4-3665-4fde-9dee-3d62dcaf3c47', -- Ava, QA Engineer in Team B
