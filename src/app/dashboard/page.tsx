@@ -21,12 +21,48 @@ export default function Dashboard() {
 
   return (
     <ClientLayout>
-      <section>
-        <FlexContainer direction="row">
-          <DataListWithAdd buttonTitle="Add country" headerTitle="Countries" />
-          <DataListWithAdd buttonTitle="Add city" headerTitle="Cities" />
+      <FlexContainer
+        as="section"
+        directionMobileView="col"
+        directionDesktopView="row"
+        className="flex p-3"
+        bg="bg-amber-900"
+      >
+        <FlexContainer
+          directionMobileView="col"
+          directionDesktopView="col"
+          gap="2"
+          bg="bg-yellow-400"
+        >
+          <FlexContainer
+            directionMobileView="col"
+            directionDesktopView="row"
+            gap="10"
+            bg="bg-amber-600"
+          >
+            <DataListWithAdd
+              buttonTitle="Add country"
+              headerTitle="Countries"
+            />
+            <DataListWithAdd buttonTitle="Add city" headerTitle="Cities" />
+          </FlexContainer>
+          <FlexContainer
+            directionMobileView="col"
+            directionDesktopView="row"
+            gap="10"
+            bg="bg-zinc-300"
+          >
+            <DataListWithAdd buttonTitle="Add office" headerTitle="Offices" />
+            <DataListWithAdd
+              buttonTitle="Add department"
+              headerTitle="Departments"
+            />
+          </FlexContainer>
         </FlexContainer>
-      </section>
+        <FlexContainer bg="bg-pink-500">
+          <div>HEJ</div>
+        </FlexContainer>
+      </FlexContainer>
     </ClientLayout>
   );
 }

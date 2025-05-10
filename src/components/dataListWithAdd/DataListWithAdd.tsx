@@ -10,7 +10,7 @@ export default function DataListWithAdd({
   headerTitle,
 }: DataListWithAddProps) {
   return (
-    <div className="bg-palette-transparent-oceanblue min-w-[20rem] w-[20rem]  rounded-md overflow-hidden flex flex-col gap-8 justify-between">
+    <div className="bg-palette-transparent-oceanblue w-full rounded-md overflow-hidden flex flex-col gap-8 justify-between">
       <div className="bg-palette-transparent-oceanblue py-6 px-5 pb-4 text-palette-color-secondary">
         <h2 className="text-xl select-none">{headerTitle}</h2>
       </div>
