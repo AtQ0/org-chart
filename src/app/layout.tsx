@@ -1,4 +1,4 @@
-import ClientSessionProvider from '@/components/providers/ClientSessionProvider';
+import ClientSessionProvider from '../providers/ClientSessionProvider';
 import './globals.css';
 
 export default function RootLayout({

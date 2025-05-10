@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import DataListWithAdd from '@/components/dataListWithAdd/DataListWithAdd';
 import ClientLayout from '@/components/layout/ClientLayout';
+import FlexContainer from '@/components/layout/FlexContainer';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -21,7 +22,10 @@ export default function Dashboard() {
   return (
     <ClientLayout>
       <section>
-        <DataListWithAdd buttonTitle="Add country" headerTitle="Cuntries" />
+        <FlexContainer direction="row">
+          <DataListWithAdd buttonTitle="Add country" headerTitle="Countries" />
+          <DataListWithAdd buttonTitle="Add city" headerTitle="Cities" />
+        </FlexContainer>
       </section>
     </ClientLayout>
   );
