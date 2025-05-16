@@ -1,40 +1,52 @@
+import React from 'react';
+
 type FlexProps = {
+  as?: 'div' | 'section';
+  backgroundColor?: string;
   children: React.ReactNode;
   className?: string;
   directionMobileView: 'row' | 'col';
-  directionDesktopView: 'row' | 'col';
+  directionTabletView: 'row' | 'col'; // md: ≥768px
+  directionDesktopView: 'row' | 'col'; // lg: ≥1024px
   gap?: '0' | '1' | '2' | '3' | '5' | '6' | '8' | '10';
-  align?: string;
-  justify?: string;
-  wrap?: string;
-  as?: 'div' | 'section';
-  bg?: string; // <-- background utility
+  padding?: '1' | '2' | '3' | '4' | '5' | '6' | '7';
+  stretchChildren?: boolean; // New prop
 };
 
 export default function Flex({
+  as = 'div',
+  backgroundColor = '',
   children,
   className = '',
   directionMobileView,
+  directionTabletView,
   directionDesktopView,
-  gap,
-  align,
-  justify,
-  wrap,
-  as = 'div',
-  bg = '', // default to no background if none provided
+  gap = '2',
+  padding = '3',
+  stretchChildren = false,
 }: FlexProps) {
   const Component = as;
-  const gapClass = gap ? `gap-${gap}` : '';
-  const baseDirectionClass =
+
+  const mobileDirection =
     directionMobileView === 'row' ? 'flex-row' : 'flex-col';
-  const desktopDirectionClass =
-    directionDesktopView === 'row' ? 'md:flex-row' : 'md:flex-col';
+  const tabletDirection = directionTabletView
+    ? `md:flex-${directionTabletView}`
+    : '';
+  const desktopDirection = directionDesktopView
+    ? `lg:flex-${directionDesktopView}`
+    : '';
+  const gapClass = gap ? `gap-${gap}` : '';
+  const paddingClass = padding ? `p-${padding}` : '';
 
   return (
     <Component
-      className={`flex ${baseDirectionClass} ${desktopDirectionClass} ${gapClass} ${align ?? ''} ${justify ?? ''} ${wrap ?? ''} ${bg} ${className} w-full`}
+      className={`flex ${mobileDirection} ${tabletDirection} ${desktopDirection} ${gapClass} ${backgroundColor} ${paddingClass} ${className}`}
     >
-      {children}
+      {React.Children.map(children, (child, i) => (
+        <div key={i} className={`w-full ${stretchChildren ? 'h-full' : ''}`}>
+          {child}
+        </div>
+      ))}
     </Component>
   );
 }

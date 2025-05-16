@@ -1,4 +1,3 @@
-// app/api/users/route.ts
 import bcrypt from 'bcrypt';
 import { NextRequest, NextResponse } from 'next/server';
 import db from '../../../database/pool';
