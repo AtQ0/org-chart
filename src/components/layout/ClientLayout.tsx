@@ -31,7 +31,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         </header>
       )}
 
-      <main className="flex-1 w-full p-5 flex flex-col gap-5 lg:px-10">
+      <main className="flex-1 w-full p-5 flex flex-col gap-5 lg:px-10 overflow-auto max-h-screen">
         {children}
       </main>
 
