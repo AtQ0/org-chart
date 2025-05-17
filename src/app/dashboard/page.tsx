@@ -19,7 +19,7 @@ export default function Dashboard() {
     <ClientLayout>
       <FlexContainer>
         <FlexContainer
-          className="w-full h-full"
+          className="w-full h-full pt-4"
           as="section"
           directionMobileView="col"
           directionTabletView="col"

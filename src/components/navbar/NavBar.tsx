@@ -42,7 +42,7 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1024px)');
+    const mq = window.matchMedia('(min-width: 1280px)'); // xl breakpoint (1280px)
     const handler = (e: MediaQueryListEvent) =>
       e.matches && setShowFloating(false);
     mq.addEventListener('change', handler);
@@ -131,12 +131,14 @@ export default function Navbar() {
 
         {/* Right side */}
         <section aria-label="User actions" className="flex gap-6 items-center">
-          <div className="hidden w-[260px] lg:inline" ref={addRoot}>
+          {/* Replacement searchbar: hidden under xl, visible at xl+ */}
+          <div className="hidden w-[260px] xl:inline" ref={addRoot}>
             <Searchbar value={searchValue} onChange={setSearchValue} />
           </div>
 
+          {/* Toggle button visible only under xl */}
           <button
-            className="lg:hidden"
+            className="xl:hidden"
             ref={toggleBtnRef}
             onClick={toggleFloating}
           >
@@ -202,9 +204,9 @@ export default function Navbar() {
         </section>
       </nav>
 
-      {/* floating bar visible only under lg */}
+      {/* floating bar visible only under xl */}
       {showFloating && (
-        <div className="absolute left-0 right-5 top-16 flex justify-end lg:hidden">
+        <div className="absolute left-0 right-5 top-16 flex justify-end xl:hidden">
           <div
             className="relative w-[260px] rounded-md bg-white shadow-md p-2"
             ref={addRoot}
