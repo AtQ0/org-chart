@@ -1,20 +1,26 @@
 import React from 'react';
 
-type FlexProps = {
+type FlexContainerProps = {
   as?: 'div' | 'section';
   backgroundColor?: string;
   children: React.ReactNode;
   className?: string;
   directionMobileView: 'row' | 'col';
-  directionTabletView: 'row' | 'col'; // md: ≥768px
-  directionLaptopView: 'row' | 'col'; // lg: ≥1024px (renamed from desktop)
-  directionDesktopView: 'row' | 'col'; // xl: ≥1280px (new)
+  directionTabletView: 'row' | 'col';
+  directionLaptopView: 'row' | 'col';
+  directionDesktopView: 'row' | 'col';
   gap?: '0' | '1' | '2' | '3' | '5' | '6' | '8' | '10';
   padding?: '1' | '2' | '3' | '4' | '5' | '6' | '7';
   stretchChildren?: boolean;
 };
 
-export default function Flex({
+function getFlexDirectionClass(prefix: string, direction: 'row' | 'col') {
+  if (direction === 'row') return `${prefix}:flex-row`;
+  if (direction === 'col') return `${prefix}:flex-col`;
+  return '';
+}
+
+export default function FlexContainer({
   as = 'div',
   backgroundColor = '',
   children,
@@ -26,20 +32,14 @@ export default function Flex({
   gap = '2',
   padding = '3',
   stretchChildren = false,
-}: FlexProps) {
+}: FlexContainerProps) {
   const Component = as;
 
   const mobileDirection =
     directionMobileView === 'row' ? 'flex-row' : 'flex-col';
-  const tabletDirection = directionTabletView
-    ? `md:flex-${directionTabletView}`
-    : '';
-  const laptopDirection = directionLaptopView
-    ? `lg:flex-${directionLaptopView}`
-    : '';
-  const desktopDirection = directionDesktopView
-    ? `xl:flex-${directionDesktopView}`
-    : '';
+  const tabletDirection = getFlexDirectionClass('md', directionTabletView);
+  const laptopDirection = getFlexDirectionClass('lg', directionLaptopView);
+  const desktopDirection = getFlexDirectionClass('xl', directionDesktopView);
   const gapClass = gap ? `gap-${gap}` : '';
   const paddingClass = padding ? `p-${padding}` : '';
 
