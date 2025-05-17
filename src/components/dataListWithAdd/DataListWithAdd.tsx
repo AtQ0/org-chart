@@ -5,7 +5,7 @@ import Searchbar from '../searchbar/Searchbar';
 interface DataListWithAddProps {
   headerTitle: string;
   buttonTitle: string;
-  showSearch?: boolean;
+  showSearch: boolean;
   dataType:
     | 'countries'
     | 'cities'
@@ -13,7 +13,10 @@ interface DataListWithAddProps {
     | 'departments'
     | 'teams'
     | 'users'
-    | 'domains';
+    | 'domains'
+    | 'roles'
+    | 'titles'
+    | 'permissions';
 }
 
 type GenericDataItem = Record<string, any>;
@@ -40,7 +43,7 @@ export default function DataListWithAdd({
     fetchData();
   }, [dataType]);
 
-  // 🧠 Smarter label extractor
+  // Smarter label extractor
   function getDisplayLabel(item: GenericDataItem): string {
     switch (dataType) {
       case 'teams':
@@ -52,6 +55,9 @@ export default function DataListWithAdd({
       case 'offices':
       case 'departments':
       case 'domains':
+      case 'roles':
+      case 'roles':
+      case 'permissions':
         return item.name;
       default:
         return JSON.stringify(item);
@@ -59,7 +65,7 @@ export default function DataListWithAdd({
   }
 
   return (
-    <div className="bg-palette-transparent-oceanblue w-full rounded-md overflow-hidden flex flex-col gap-8 justify-between]">
+    <div className="bg-palette-transparent-oceanblue w-full h-full rounded-md overflow-hidden flex flex-col gap-8 justify-between]">
       <div className="bg-palette-transparent-oceanblue py-6 px-5 pb-4 text-palette-color-secondary">
         <h2 className="text-xl select-none">{headerTitle}</h2>
       </div>

@@ -17,43 +17,61 @@ export default function Dashboard() {
 
   return (
     <ClientLayout>
-      <FlexContainer className="bg-amber-200">
+      <FlexContainer>
         <FlexContainer
-          className="w-full"
+          className="w-full h-full"
           as="section"
           directionMobileView="col"
           directionTabletView="col"
           directionLaptopView="col"
           directionDesktopView="row"
-          backgroundColor="bg-blue-500"
-          stretchChildren // enables h-full on child wrappers
+          stretchChildren
         >
           <FlexContainer
             className="h-full w-full"
             directionMobileView="col"
             directionTabletView="col"
             directionLaptopView="col"
-            backgroundColor="bg-red-600"
             stretchChildren
           >
             <FlexContainer
-              className="bg-white h-full"
+              className="h-full"
               directionMobileView="col"
               directionTabletView="row"
               directionLaptopView="row"
             >
-              <p className="bg-amber-400 h-[300px]">hej</p>
-              <p className="bg-amber-600 h-[300px]">san</p>
+              <DataListWithAdd
+                headerTitle="Countries"
+                buttonTitle="Add country"
+                dataType="countries"
+                showSearch={true}
+              />
+              <DataListWithAdd
+                headerTitle="Cities"
+                buttonTitle="Add city"
+                dataType="cities"
+                showSearch={true}
+              />
             </FlexContainer>
 
             <FlexContainer
-              className="bg-white h-full"
+              className="h-full"
               directionMobileView="col"
               directionTabletView="row"
               directionLaptopView="row"
             >
-              <p className="bg-amber-400 h-[300px]">svej</p>
-              <p className="bg-amber-600 h-[300px]">san</p>
+              <DataListWithAdd
+                headerTitle="Offices"
+                buttonTitle="Add office"
+                dataType="offices"
+                showSearch={true}
+              />
+              <DataListWithAdd
+                headerTitle="Departments"
+                buttonTitle="Add department"
+                dataType="departments"
+                showSearch={true}
+              />
             </FlexContainer>
           </FlexContainer>
           <FlexContainer
@@ -61,20 +79,34 @@ export default function Dashboard() {
             directionMobileView="col"
             directionTabletView="col"
             directionLaptopView="col"
-            backgroundColor="bg-red-600"
             stretchChildren
           >
             <FlexContainer
-              className="bg-white h-full"
+              className="h-full"
               directionMobileView="col"
               directionTabletView="row"
               directionLaptopView="row"
             >
-              <p className="bg-amber-400 h-[300px]">Hej</p>
-              <p className="bg-amber-600 h-[300px]">san</p>
+              <DataListWithAdd
+                headerTitle="Teams"
+                buttonTitle="Add team"
+                dataType="teams"
+                showSearch={true}
+              />
+              <DataListWithAdd
+                headerTitle="Domains"
+                buttonTitle="Add domain"
+                dataType="domains"
+                showSearch={true}
+              />
             </FlexContainer>
-            <FlexContainer className="bg-white h-full">
-              <p className="bg-purple-600 h-[300px]">Svej san</p>
+            <FlexContainer className="h-full">
+              <DataListWithAdd
+                headerTitle="Users"
+                buttonTitle="Add user"
+                dataType="users"
+                showSearch={true}
+              />
             </FlexContainer>
           </FlexContainer>
         </FlexContainer>
@@ -83,11 +115,25 @@ export default function Dashboard() {
           directionMobileView="col"
           directionLaptopView="col"
           directionDesktopView="row"
-          className="bg-orange-300"
         >
-          <p className="bg-gray-400 h-[300px]">hej</p>
-          <p className="bg-gray-600 h-[300px]">san</p>
-          <p className="bg-pink-600 h-[300px]">svej san</p>
+          <DataListWithAdd
+            headerTitle="Roles"
+            buttonTitle="Add role"
+            dataType="roles"
+            showSearch={true}
+          />
+          <DataListWithAdd
+            headerTitle="Titles"
+            buttonTitle="Add title"
+            dataType="titles"
+            showSearch={true}
+          />
+          <DataListWithAdd
+            headerTitle="Permissions"
+            buttonTitle="Add permission"
+            dataType="permissions"
+            showSearch={true}
+          />
         </FlexContainer>
       </FlexContainer>
     </ClientLayout>
