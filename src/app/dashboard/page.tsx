@@ -26,7 +26,6 @@ export default function Dashboard() {
           directionLaptopView="col"
           directionDesktopView="row"
           backgroundColor="bg-blue-500"
-          padding="3"
           stretchChildren // enables h-full on child wrappers
         >
           <FlexContainer
@@ -35,7 +34,6 @@ export default function Dashboard() {
             directionTabletView="col"
             directionLaptopView="col"
             backgroundColor="bg-red-600"
-            padding="2"
             stretchChildren
           >
             <FlexContainer
@@ -64,7 +62,6 @@ export default function Dashboard() {
             directionTabletView="col"
             directionLaptopView="col"
             backgroundColor="bg-red-600"
-            padding="2"
             stretchChildren
           >
             <FlexContainer

@@ -10,7 +10,7 @@ type FlexContainerProps = {
   directionLaptopView: 'row' | 'col';
   directionDesktopView: 'row' | 'col';
   gap?: '0' | '1' | '2' | '3' | '5' | '6' | '8' | '10';
-  padding?: '1' | '2' | '3' | '4' | '5' | '6' | '7';
+  padding?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7';
   stretchChildren?: boolean;
 };
 
@@ -29,8 +29,8 @@ export default function FlexContainer({
   directionTabletView,
   directionLaptopView,
   directionDesktopView,
-  gap = '2',
-  padding = '3',
+  gap = '10',
+  padding = '0',
   stretchChildren = false,
 }: FlexContainerProps) {
   const Component = as;
