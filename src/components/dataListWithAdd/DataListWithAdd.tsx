@@ -50,14 +50,17 @@ export default function DataListWithAdd({
         return item.team_name;
       case 'users':
         return item.first_name + ' ' + (item.last_name || '');
+      case 'roles':
+        return item.role_name;
+      case 'titles':
+        return item.title_name;
+      case 'permissions':
+        return item.permission_name;
       case 'countries':
       case 'cities':
       case 'offices':
       case 'departments':
       case 'domains':
-      case 'roles':
-      case 'roles':
-      case 'permissions':
         return item.name;
       default:
         return JSON.stringify(item);
@@ -65,7 +68,7 @@ export default function DataListWithAdd({
   }
 
   return (
-    <div className="bg-palette-transparent-oceanblue w-full h-full rounded-md overflow-hidden flex flex-col gap-8 justify-between]">
+    <div className="bg-palette-transparent-oceanblue w-full h-full rounded-md overflow-hidden flex flex-col gap-8 justify-between">
       <div className="bg-palette-transparent-oceanblue py-6 px-5 pb-4 text-palette-color-secondary">
         <h2 className="text-xl select-none">{headerTitle}</h2>
       </div>
@@ -76,7 +79,7 @@ export default function DataListWithAdd({
         </div>
       )}
 
-      <div className="mx-5 bg-palette-background-transparent rounded-md shadow-[0_0_0_3px_rgba(28,45,67,0.5)] overflow-y-auto  p-3 text-sm text-white h-40">
+      <div className="mx-5 bg-palette-background-transparent rounded-md shadow-[0_0_0_3px_rgba(28,45,67,0.5)] overflow-y-auto p-3 text-sm h-40">
         {data.length > 0 ? (
           <ul className="list-disc pl-4">
             {data.map((item, idx) => (
