@@ -4,6 +4,15 @@ CREATE DATABASE org_chart_db;
 -- First enable the pgcrypto extension if not already enabled
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+-- The `update_timestamp` function should be defined to update the `updated_at` field:
+CREATE OR REPLACE FUNCTION update_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE TABLE titles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title_name VARCHAR(255) NOT NULL,
@@ -16,15 +25,6 @@ CREATE TRIGGER update_title_modified
 BEFORE UPDATE ON titles
 FOR EACH ROW
 EXECUTE FUNCTION update_timestamp();
-
--- The `update_timestamp` function should be defined to update the `updated_at` field:
-CREATE OR REPLACE FUNCTION update_timestamp()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
 
 CREATE TABLE roles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -39,28 +39,11 @@ BEFORE UPDATE ON roles
 FOR EACH ROW
 EXECUTE FUNCTION update_timestamp();
 
--- The `update_timestamp` function should be defined to update the `updated_at` field:
-CREATE OR REPLACE FUNCTION update_timestamp()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-
 CREATE TABLE teams (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),  -- Auto-generated UUID for team ID
     team_name VARCHAR(255) NOT NULL                 -- Team name, required field
 );
 
--- Add foreign key relationships and other columns to the teams table
-ALTER TABLE teams
-    ADD COLUMN team_lead_id UUID REFERENCES users(id),         -- Foreign key to users table for team lead
-    ADD COLUMN team_manager_id UUID REFERENCES users(id),      -- Foreign key to users table for team manager
-    --ADD COLUMN team_department_id UUID REFERENCES departments(id), -- Foreign key to departments table
-    ADD COLUMN created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- Timestamp for when the team was created
-    ADD COLUMN updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP; -- Timestamp for when the team was last updated
 
 
 -- Trigger to update `updated_at` when a team is modified
@@ -68,15 +51,6 @@ CREATE TRIGGER update_team_modified
 BEFORE UPDATE ON teams
 FOR EACH ROW
 EXECUTE FUNCTION update_timestamp();
-
--- The `update_timestamp` function to automatically update the `updated_at` field
-CREATE OR REPLACE FUNCTION update_timestamp()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
 
 
 CREATE TABLE users (
@@ -93,6 +67,15 @@ CREATE TABLE users (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Add foreign key relationships and other columns to the teams table
+ALTER TABLE teams
+    ADD COLUMN team_lead_id UUID REFERENCES users(id),         -- Foreign key to users table for team lead
+    ADD COLUMN team_manager_id UUID REFERENCES users(id),      -- Foreign key to users table for team manager
+    --ADD COLUMN team_department_id UUID REFERENCES departments(id), -- Foreign key to departments table
+    ADD COLUMN created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- Timestamp for when the team was created
+    ADD COLUMN updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP; -- Timestamp for when the team was last updated
+
 
 ------------------
 --- MOCKED DATA---
@@ -124,7 +107,7 @@ VALUES
   ('33333333-3333-3333-3333-333333333333', 'team manager'),
   ('44444444-4444-4444-4444-444444444444', 'department manager'),
   ('55555555-5555-5555-5555-555555555555', 'office manager'),
-  ('66666666-6666-6666-6666-666666666666', 'admin'),
+  ('66666666-6666-6666-6666-666666666666', 'admin');
 
 
 -- Mocked data for users
@@ -137,7 +120,7 @@ INSERT INTO users (
     'alex',
     'johnson',
     'alex.johnson@example.com',
-    '$2a$12$MDOWgbgDkttO7PJ1ZF.wAO/f15Jrciplu8iTKKvnv.RG2rvA.1mRa',  -- Hashed password
+    '$2a$12$MDOWgbgDkttO7PJ1ZF.wAO/f15Jrciplu8iTKKvnv.RG2rvA.1mRa',  -- Hashed password (sommar2025)
     'https://example.com/images/alex.jpg',
     '77777777-7777-7777-7777-777777777777', -- CEO title
     '44444444-4444-4444-4444-444444444444',  -- Board of Directors Team (CEO's board)
