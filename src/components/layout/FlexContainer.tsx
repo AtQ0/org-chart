@@ -1,21 +1,61 @@
+'use client';
+
 import React from 'react';
+
+type Dir = 'row' | 'col';
+type Gap = '0' | '1' | '2' | '3' | '5' | '6' | '8' | '10';
+type Pad = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7';
 
 type FlexContainerProps = {
   as?: 'div' | 'section';
   backgroundColor?: string;
   children: React.ReactNode;
   className?: string;
-  directionMobileView?: 'row' | 'col'; // < 768px
-  directionTabletView?: 'row' | 'col'; // >768px
-  directionLaptopView?: 'row' | 'col'; // >1024px
-  directionDesktopView?: 'row' | 'col'; // >1280px
-  gap?: '0' | '1' | '2' | '3' | '5' | '6' | '8' | '10';
-  padding?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7';
+
+  /** Base (mobile-first) direction: < 768px */
+  directionMobileView?: Dir;
+  /** ≥768px */
+  directionTabletView?: Dir;
+  /** ≥1024px */
+  directionLaptopView?: Dir;
+  /** ≥1280px */
+  directionDesktopView?: Dir;
+
+  gap?: Gap;
+  padding?: Pad;
+
   stretchChildren?: boolean;
 };
 
-function getFlexDirectionClass(prefix: string, direction: 'row' | 'col') {
-  return `${prefix}:flex-${direction}`;
+const dirClass = {
+  row: 'flex-row',
+  col: 'flex-col',
+} as const;
+
+const gapMap: Record<Gap, string> = {
+  '0': 'gap-0',
+  '1': 'gap-1',
+  '2': 'gap-2',
+  '3': 'gap-3',
+  '5': 'gap-5',
+  '6': 'gap-6',
+  '8': 'gap-8',
+  '10': 'gap-10',
+};
+
+const paddingMap: Record<Pad, string> = {
+  '0': 'p-0',
+  '1': 'p-1',
+  '2': 'p-2',
+  '3': 'p-3',
+  '4': 'p-4',
+  '5': 'p-5',
+  '6': 'p-6',
+  '7': 'p-7',
+};
+
+function cx(...parts: Array<string | false | null | undefined>) {
+  return parts.filter(Boolean).join(' ');
 }
 
 export default function FlexContainer({
@@ -31,30 +71,50 @@ export default function FlexContainer({
   padding = '0',
   stretchChildren = false,
 }: FlexContainerProps) {
-  const Component = as;
+  const Component: any = as;
 
-  const mobileDirection = `flex-${directionMobileView}`;
-  const tabletDirection = directionTabletView
-    ? getFlexDirectionClass('md', directionTabletView)
-    : '';
-  const laptopDirection = directionLaptopView
-    ? getFlexDirectionClass('lg', directionLaptopView)
-    : '';
-  const desktopDirection = directionDesktopView
-    ? getFlexDirectionClass('xl', directionDesktopView)
-    : '';
+  // Responsive direction classes as literal strings so Tailwind sees them
+  const baseDir = dirClass[directionMobileView];
+  const mdDir =
+    directionTabletView === 'row'
+      ? 'md:flex-row'
+      : directionTabletView === 'col'
+        ? 'md:flex-col'
+        : '';
+  const lgDir =
+    directionLaptopView === 'row'
+      ? 'lg:flex-row'
+      : directionLaptopView === 'col'
+        ? 'lg:flex-col'
+        : '';
+  const xlDir =
+    directionDesktopView === 'row'
+      ? 'xl:flex-row'
+      : directionDesktopView === 'col'
+        ? 'xl:flex-col'
+        : '';
 
-  const gapClass = `gap-${gap}`;
-  const paddingClass = `p-${padding}`;
+  const gapClass = gapMap[gap];
+  const paddingClass = paddingMap[padding];
 
   return (
     <Component
-      className={`flex items-stretch ${mobileDirection} ${tabletDirection} ${laptopDirection} ${desktopDirection} ${gapClass} ${backgroundColor} ${paddingClass} ${className}`}
+      className={cx(
+        'flex items-stretch',
+        baseDir,
+        mdDir,
+        lgDir,
+        xlDir,
+        gapClass,
+        paddingClass,
+        backgroundColor,
+        className,
+      )}
     >
       {React.Children.map(children, (child, i) => (
         <div
           key={i}
-          className={`w-full ${stretchChildren ? 'h-full flex-1' : ''}`}
+          className={cx(stretchChildren ? 'flex-1 h-full' : 'w-full')}
         >
           {child}
         </div>
