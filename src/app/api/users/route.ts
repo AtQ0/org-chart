@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { NextRequest, NextResponse } from 'next/server';
-import db from '../../../database/pool';
+import db from '../../../server/pool';
 
 // SIMPLE GET REQUEST THAT VIEWS ALL USERS IN THE USERS TABLE
 export async function GET() {

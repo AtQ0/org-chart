@@ -132,7 +132,7 @@ export default function Navbar() {
             <X size={32} className="h-7 w-7 cursor-pointer" />
           </button>
         </div>
-        <div className="bg-palette-transparent-oceanblue flex-1 flex justify-center p-3 pt-12 pb-32">
+        <div className="bg-palette-transparent-oceanblue flex-1 flex justify-center p-3 pt-7 pb-32">
           <ul className="bg-palette-transparent-oceanblue w-full text-2xl flex flex-col gap-4 p-2">
             <li>
               {' '}

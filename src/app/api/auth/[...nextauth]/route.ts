@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import db from '@/database/pool';
+import db from '@/server/pool';
 
 export const authOptions: NextAuthOptions = {
   providers: [
