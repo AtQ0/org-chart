@@ -45,7 +45,7 @@ export default function Home() {
             alt="Logotype"
             className="object-cover rounded-xl w-full" // Use Tailwind's width utility class
             height={400}
-            src="/images/main-logo.png"
+            src="/images/logotypes/main-logo.png"
             width={400}
           />
 
