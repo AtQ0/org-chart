@@ -7,6 +7,7 @@ import {
   SignOut,
   TreeStructure,
   UserCircle,
+  X,
 } from '@phosphor-icons/react';
 import { useEffect, useRef, useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
@@ -15,22 +16,26 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useBreakpoints } from '@/hooks/useBreakpoint';
 import { BREAKPOINTS } from '@/utils/breakpoints';
+import Overlay from '../overlay/Overlay';
 import Searchbar from '../searchbar/Searchbar';
 
 export default function Navbar() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
   const onDashboard = pathname === '/dashboard';
+
   const [showFloating, setShowFloating] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [isNavigating, setIsNavigating] = useState(false);
+  const [isInView, setIsInView] = useState(false);
 
   const userRole = session?.user?.role;
   const userId = session?.user?.id;
 
   const { isBelowBreakpoint: isMobile } = useBreakpoints(BREAKPOINTS.mobile);
 
+  // click-outside roots for the floating search
   const roots = useRef<Set<HTMLElement>>(new Set());
   const addRoot = (el: HTMLElement | null): void => {
     if (el) roots.current.add(el);
@@ -38,17 +43,20 @@ export default function Navbar() {
 
   const toggleBtnRef = useRef<HTMLButtonElement | null>(null);
   useEffect(() => {
-    if (toggleBtnRef.current) roots.current.add(toggleBtnRef.current);
+    if (toggleBtnRef.current)
+      roots.current.add(toggleBtnRef.current as HTMLElement);
   }, []);
 
+  // close floating search when reaching xl and up
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1280px)'); // xl breakpoint (1280px)
+    const mq = window.matchMedia('(min-width: 1280px)'); // xl breakpoint
     const handler = (e: MediaQueryListEvent) =>
       e.matches && setShowFloating(false);
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
 
+  // click outside handler for floating search
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const t = e.target as Node;
@@ -62,17 +70,36 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // lock body scroll while menu is open
+  useEffect(() => {
+    if (isInView) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+    return () => document.body.classList.remove('overflow-hidden');
+  }, [isInView]);
+
+  // close menu on Escape
+  useEffect(() => {
+    if (!isInView) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsInView(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isInView]);
+
   const toggleFloating = () => {
     setSearchValue('');
     setShowFloating(prev => !prev);
   };
 
   const handleSignOut = async () => {
-    if (isNavigating) return; // Prevent signing out while navigating
-
-    setIsNavigating(true); // Indicate that navigation is in progress
-    await signOut({ redirect: false }); // Sign out the user, but don't redirect automatically
-    router.push('/'); // Redirect manually to the home page or any other page you want after sign-out
+    if (isNavigating) return;
+    setIsNavigating(true);
+    await signOut({ redirect: false });
+    router.push('/');
   };
 
   const handleNavigate = (path: string) => {
@@ -81,8 +108,53 @@ export default function Navbar() {
     router.push(path);
   };
 
+  const handleMenue = () => setIsInView(v => !v);
+
   return (
-    <div className="relative">
+    <div>
+      {/* Fade-in/out overlay only after fade-out completes */}
+      <Overlay open={isInView} onClick={() => setIsInView(false)} />
+
+      {/* Sliding drawer */}
+      <section
+        className={`bg-palette-oceanblue absolute flex flex-col z-10 h-full w-80 transform transition-transform duration-300 ease-in-out ${
+          isInView ? 'translate-x-0' : '-translate-x-full'
+        }`}
+        aria-hidden={!isInView}
+      >
+        <div className="bg-palette-transparent-oceanblue flex justify-end h-[70px] p-1">
+          <button
+            aria-label="Exit menu"
+            className="p-2"
+            disabled={isNavigating}
+            onClick={handleMenue}
+          >
+            <X size={32} className="h-7 w-7 cursor-pointer" />
+          </button>
+        </div>
+        <div className="bg-palette-transparent-oceanblue flex-1 flex justify-center p-3 pt-12 pb-32">
+          <ul className="bg-palette-transparent-oceanblue w-full text-2xl flex flex-col gap-4 p-2">
+            <li>
+              {' '}
+              <Link href={'/profile'}>MY PROFILE</Link>{' '}
+            </li>
+            <li>
+              <Link href={'/dashboard'}>ADMIN DASHBOARD</Link>
+            </li>
+            <li>
+              <Link href={'/org-chart'}>ORGANIZATION CHART</Link>
+            </li>
+            <li>SETTINGS</li>
+            <li>
+              <button className="cursor-pointer" onClick={handleSignOut}>
+                EXIT
+              </button>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Top nav */}
       <nav
         aria-label="Main navigation"
         className="relative flex h-[70px] items-center justify-between bg-palette-transparent-oceanblue p-4 px-5 lg:px-10"
@@ -90,16 +162,18 @@ export default function Navbar() {
         {/* Left side */}
         <section
           aria-label="Main menu"
-          className="flex items-center gap-5 md:gap-2 md:cursor-pointer"
+          className="flex items-center gap-5 md:gap-0"
         >
-          <button
-            className="bg-amber-500"
-            onClick={() => handleNavigate('/menu')}
-          >
+          <button onClick={handleMenue}>
             <List className="h-7 w-7 cursor-pointer" />
           </button>
 
-          <span className="hidden md:inline text-lg font-medium">MENU</span>
+          <span
+            className="hidden md:inline pl-0.5 text-lg font-medium cursor-pointer leading-none"
+            onClick={handleMenue}
+          >
+            MENU
+          </span>
 
           <Link aria-label="Home" className="block md:hidden" href="/">
             <Image
@@ -149,7 +223,7 @@ export default function Navbar() {
             <div className="flex gap-6 items-center">
               <button
                 aria-label="Admin dashboard"
-                className="bg-green-600 h-fit p-0.5 cursor-pointer"
+                className="h-fit p-0.5 cursor-pointer"
                 disabled={isNavigating}
                 onClick={() =>
                   handleNavigate(onDashboard ? '/org-chart' : '/dashboard')
@@ -164,7 +238,7 @@ export default function Navbar() {
 
               <button
                 aria-label="Profile"
-                className="bg-blue-500 p-0.5 cursor-pointer"
+                className="p-0.5 cursor-pointer"
                 disabled={isNavigating}
                 onClick={() => handleNavigate(`/profile`)}
               >
@@ -173,7 +247,6 @@ export default function Navbar() {
 
               <button
                 aria-label="Sign out"
-                className="bg-yellow-300"
                 disabled={isNavigating}
                 onClick={handleSignOut}
               >
@@ -184,7 +257,6 @@ export default function Navbar() {
             <div className="flex gap-6 items-center">
               <button
                 aria-label="User profile"
-                className="bg-yellow-300"
                 disabled={isNavigating}
                 onClick={() => handleNavigate(`/user/${userId}`)}
               >
@@ -193,7 +265,6 @@ export default function Navbar() {
 
               <button
                 aria-label="Sign out"
-                className="bg-yellow-300"
                 disabled={isNavigating}
                 onClick={handleSignOut}
               >
@@ -204,7 +275,7 @@ export default function Navbar() {
         </section>
       </nav>
 
-      {/* floating bar visible only under xl */}
+      {/* Floating search visible only under xl */}
       {showFloating && (
         <div className="absolute left-0 right-5 top-16 flex justify-end xl:hidden">
           <div
